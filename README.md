@@ -9,3 +9,7 @@ Currently, two official plugins are available:
 
 My advance feature：Add a Location Picker to the Location form that allows the selection of Long and Lat coordinates from a map.（LocationPicker.jsx）
 ChatGPT4o is used to help create advance features and add comments to the code.
+
+
+docker-compose up -d --build
+curl http://localhost/healthz && curl http://localhost/api/healthz
