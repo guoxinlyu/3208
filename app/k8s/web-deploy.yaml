@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: autoshow
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: web } }
+  template:
+    metadata: { labels: { app: web } }
+    spec:
+      containers:
+      - name: web
+        # 替换 PROJECT_ID
+        image: us-east1-docker.pkg.dev/PROJECT_ID/apps/web:1.0.0
+        ports: [{ containerPort: 80 }]
+        readinessProbe: { httpGet: { path: /healthz, port: 80 }, initialDelaySeconds: 5 }
+        livenessProbe:  { httpGet: { path: /healthz, port: 80 }, initialDelaySeconds: 10 }
+        resources:
+          requests: { cpu: 100m, memory: 128Mi }
+          limits:   { cpu: 300m, memory: 256Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-svc
+  namespace: autoshow
+spec:
+  selector: { app: web }
+  ports: [ { port: 80, targetPort: 80 } ]
+  type: ClusterIP
