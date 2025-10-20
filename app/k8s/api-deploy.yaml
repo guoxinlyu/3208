@@ -11,9 +11,12 @@ spec:
     metadata:
       labels: { app: api }
     spec:
+      # ✅（可选，长期更安全）启用后请创建并绑定 api-k8s-sa ↔ GSA
+      # serviceAccountName: api-k8s-sa
+
       containers:
         - name: api
-          image: us-east1-docker.pkg.dev/centered-center-471311-q2/apps/api:1.0.0 
+          image: us-east1-docker.pkg.dev/centered-center-471311-q2/apps/api:1.0.0
           ports:
             - containerPort: 3000
           env:
@@ -21,24 +24,31 @@ spec:
               value: "production"
             - name: PORT
               value: "3000"
-            - name: DB_HOST
+
+            # ✅ 改为 PG*，与 db.js 的读取一致
+            - name: PGHOST
               value: "127.0.0.1"
-            - name: DB_PORT
+            - name: PGPORT
               value: "5432"
-            - name: DB_NAME
+            - name: PGDATABASE
               valueFrom: { secretKeyRef: { name: db-credentials, key: DB_NAME } }
-            - name: DB_USER
+            - name: PGUSER
               valueFrom: { secretKeyRef: { name: db-credentials, key: DB_USER } }
-            - name: DB_PASS
+            - name: PGPASSWORD
               valueFrom: { secretKeyRef: { name: db-credentials, key: DB_PASS } }
+
+          # ✅ 探针路径修成 /healthz（与你的 index.js 一致）
           readinessProbe:
-            httpGet: { path: /api/healthz, port: 3000 } 
+            httpGet: { path: /healthz, port: 3000 }
             initialDelaySeconds: 5
             periodSeconds: 5
+            failureThreshold: 3
           livenessProbe:
-            httpGet: { path: /api/healthz, port: 3000 }
+            httpGet: { path: /healthz, port: 3000 }
             initialDelaySeconds: 10
             periodSeconds: 10
+            failureThreshold: 3
+
           resources:
             requests: { cpu: 100m, memory: 256Mi }
             limits:   { cpu: 500m, memory: 512Mi }
@@ -48,12 +58,13 @@ spec:
           args:
             - "--structured-logs"
             - "--port=5432"
-            - "$(INSTANCE_CONN)"
+            - "$(INSTANCE_CONN)"        # 形如 PROJECT:REGION:INSTANCE
           env:
             - name: INSTANCE_CONN
               valueFrom: { secretKeyRef: { name: db-credentials, key: INSTANCE_CONN } }
           securityContext:
             runAsNonRoot: true
+
 ---
 apiVersion: v1
 kind: Service
@@ -65,5 +76,5 @@ spec:
   ports:
     - port: 3000
       targetPort: 3000
-  type: ClusterIP
+  type: ClusterIP   
 
