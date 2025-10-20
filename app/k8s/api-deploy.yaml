@@ -5,26 +5,55 @@ metadata:
   namespace: autoshow
 spec:
   replicas: 2
-  selector: { matchLabels: { app: api } }
+  selector:
+    matchLabels: { app: api }
   template:
-    metadata: { labels: { app: api } }
+    metadata:
+      labels: { app: api }
     spec:
       containers:
-      - name: api
-        # 替换 PROJECT_ID
-        image: us-east1-docker.pkg.dev/PROJECT_ID/apps/api:1.0.0
-        ports: [{ containerPort: 3000 }]
-        env:
-        - name: NODE_ENV
-          value: "production"
-        - name: PORT
-          value: "3000"
-        readinessProbe: { httpGet: { path: /healthz, port: 3000 }, initialDelaySeconds: 5 }
-        livenessProbe:  { httpGet: { path: /healthz, port: 3000 }, initialDelaySeconds: 10 }
-        resources:
-          requests: { cpu: 100m, memory: 256Mi }
-          limits:   { cpu: 500m, memory: 512Mi }
-      # 若用 Cloud SQL，可在这里加 cloud-sql-proxy sidecar（之后我可以给你专版）
+        - name: api
+          image: us-east1-docker.pkg.dev/centered-center-471311-q2/apps/api:1.0.0 
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "3000"
+            - name: DB_HOST
+              value: "127.0.0.1"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              valueFrom: { secretKeyRef: { name: db-credentials, key: DB_NAME } }
+            - name: DB_USER
+              valueFrom: { secretKeyRef: { name: db-credentials, key: DB_USER } }
+            - name: DB_PASS
+              valueFrom: { secretKeyRef: { name: db-credentials, key: DB_PASS } }
+          readinessProbe:
+            httpGet: { path: /api/healthz, port: 3000 } 
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: /api/healthz, port: 3000 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }
+            limits:   { cpu: 500m, memory: 512Mi }
+
+        - name: cloud-sql-proxy
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.11.4
+          args:
+            - "--structured-logs"
+            - "--port=5432"
+            - "$(INSTANCE_CONN)"
+          env:
+            - name: INSTANCE_CONN
+              valueFrom: { secretKeyRef: { name: db-credentials, key: INSTANCE_CONN } }
+          securityContext:
+            runAsNonRoot: true
 ---
 apiVersion: v1
 kind: Service
@@ -33,5 +62,8 @@ metadata:
   namespace: autoshow
 spec:
   selector: { app: api }
-  ports: [ { port: 3000, targetPort: 3000 } ]
+  ports:
+    - port: 3000
+      targetPort: 3000
   type: ClusterIP
+
