@@ -11,7 +11,15 @@ app.use(express.json());
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-please-change';
 
 // 健康检查
-app.get('/healthz', (_, res) => res.send('ok'));
+app.get('/healthz', async (_req, res) => {
+  try {
+    await pool.query('SELECT 1');
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
 
 // 登录（演示版）
 app.post('/auth/login', async (req, res) => {
@@ -79,3 +87,4 @@ app.post('/posts', auth, async (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API listening on :${port}`));
+
