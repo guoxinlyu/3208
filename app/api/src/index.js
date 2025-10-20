@@ -8,6 +8,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use('/api', (req, _res, next) => {
+  req.url = req.url.replace(/^\/api(\/|$)/, '/');
+  next();
+});
+
+
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-please-change';
 
 // 健康检查
@@ -87,4 +93,5 @@ app.post('/posts', auth, async (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API listening on :${port}`));
+
 
