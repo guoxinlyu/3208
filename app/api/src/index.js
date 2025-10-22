@@ -57,6 +57,27 @@ function auth(req, res, next) {
   }
 }
 
+app.post('/auth/register', async (req, res) => {
+  const { username, password } = req.body ?? {}
+  if (!username || !password || password.length < 6) {
+    return res.status(400).json({ error: 'Username and password(>=6) required' })
+  }
+  try {
+    const hash = bcrypt.hashSync(password, 10)
+    const { rows } = await pool.query(
+      'INSERT INTO users (username, password_hash) VALUES ($1,$2) RETURNING id, username',
+      [username, hash]
+    )
+    const token = jwt.sign({ uid: rows[0].id, username: rows[0].username }, JWT_SECRET, { expiresIn: '7d' })
+    res.status(201).json({ token, username: rows[0].username })
+  } catch (e) {
+    if (String(e.message).includes('duplicate')) {
+      return res.status(409).json({ error: 'Username already exists' })
+    }
+    res.status(500).json({ error: 'Register failed' })
+  }
+});
+
 // 列表
 app.get('/posts', async (req, res) => {
   const q = (req.query.q || '').trim();
@@ -96,6 +117,7 @@ app.post('/posts', auth, async (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API listening on :${port}`));
+
 
 
 
