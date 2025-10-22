@@ -7,7 +7,6 @@ import { pool } from './db.js';
 
 const app = express();
 app.use(cors());
-app.use(uploadRouter)
 app.use(express.json());
 
 app.use((req, _res, next) => {
@@ -17,6 +16,7 @@ app.use((req, _res, next) => {
   next();
 });
 
+app.use(uploadRouter)
 
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-please-change';

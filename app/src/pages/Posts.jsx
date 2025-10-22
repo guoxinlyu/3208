@@ -61,13 +61,35 @@ export default function Posts() {
                 </div>
             ) : items.length ? (
                 <ul className="list card" style={{ padding: '12px 16px' }}>
-                    {items.map(p => (
-                        <li key={p.id} style={{ padding: '10px 0', borderBottom: '1px solid color-mix(in oklab, var(--text) 10%, transparent)' }}>
-                            <Link to={`/posts/${p.id}`}>{p.title}</Link>
-                            <span className="muted"> · {p.author}</span>
-                        </li>
-                    ))}
+                    {items.map(p => {
+                        const cover = p.cover_url || p.cover || p.image || `https://picsum.photos/seed/post${p.id}/400/260`
+                        return (
+                            <li
+                                key={p.id}
+                                style={{
+                                    padding: '10px 0',
+                                    borderBottom: '1px solid color-mix(in oklab, var(--text) 10%, transparent)',
+                                    display: 'grid',
+                                    gridTemplateColumns: '120px 1fr',
+                                    gap: 12,
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <img
+                                    src={cover}
+                                    alt="cover"
+                                    style={{ width: 120, height: 80, objectFit: 'cover', borderRadius: 10, border: '1px solid var(--border)' }}
+                                    loading="lazy"
+                                />
+                                <div>
+                                    <Link to={`/posts/${p.id}`}>{p.title}</Link>
+                                    <span className="muted"> · {p.author || '匿名'}</span>
+                                </div>
+                            </li>
+                        )
+                    })}
                 </ul>
+
             ) : (
                 <div className="card" role="status" aria-live="polite" style={{ textAlign: 'center', padding: '28px' }}>
                     <div style={{ fontSize: 18, marginBottom: 6 }}>🤔 没有找到相关帖子</div>
