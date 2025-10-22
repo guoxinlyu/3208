@@ -7,6 +7,7 @@ import Login from './pages/Login.jsx'
 import Posts from './pages/Posts.jsx'
 import PostDetail from './pages/PostDetail.jsx'
 import NewPost from './pages/NewPost.jsx'
+import Register from './pages/Register.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import './index.css'
 
@@ -17,9 +18,10 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: 'login', element: <Login /> },
+      { path: 'register', element: <Register /> },
       { path: 'posts', element: <Posts /> },
       { path: 'posts/:id', element: <PostDetail /> },
-       { path: 'register', element: <Register /> },
+      {
         path: 'new',
         element: (
           <ProtectedRoute>
@@ -36,3 +38,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <RouterProvider router={router} />
   </React.StrictMode>,
 )
+
