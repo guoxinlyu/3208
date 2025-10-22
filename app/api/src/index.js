@@ -86,13 +86,13 @@ app.get('/posts', async (req, res) => {
   let result;
   if (q) {
     result = await pool.query(
-      `SELECT id, title, author, created_at FROM posts
+      `SELECT id, title, author, created_at, cover_url FROM posts
        WHERE title ILIKE $1 OR content ILIKE $1
        ORDER BY id DESC LIMIT 50`, [`%${q}%`]
     );
   } else {
     result = await pool.query(
-      `SELECT id, title, author, created_at FROM posts
+      `SELECT id, title, author, created_at, cover_url FROM posts
        ORDER BY id DESC LIMIT 50`
     );
   }
@@ -108,11 +108,11 @@ app.get('/posts/:id', async (req, res) => {
 
 // 新建（需要登录）
 app.post('/posts', auth, async (req, res) => {
-  const { title, content, author } = req.body ?? {};
+  const { title, content, author, cover_url } = req.body ?? {};
   if (!title || !content) return res.status(400).json({ error: 'Missing title or content' });
   const { rows } = await pool.query(
-    'INSERT INTO posts (title, content, author) VALUES ($1,$2,$3) RETURNING id',
-    [title, content, author || req.user.username]
+    'INSERT INTO posts (title, content, author, cover_url) VALUES ($1,$2,$3,$4) RETURNING id',
+    [title, content, author || req.user.username, cover_url || null]
   );
   res.status(201).json({ id: rows[0].id });
 });
