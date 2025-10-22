@@ -2,10 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import uploadRouter from './upload.js'
 import { pool } from './db.js';
 
 const app = express();
 app.use(cors());
+app.use(uploadRouter)
 app.use(express.json());
 
 app.use((req, _res, next) => {

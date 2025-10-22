@@ -31,5 +31,13 @@ export async function createPost(data) {
   return request('/posts', { method: 'POST', body: data });
 }
 
+export async function uploadImage(file, { signal } = {}) {
+  const fd = new FormData(); fd.append('file', file);
+  const headers = {}; const t = getToken(); if (t) headers.Authorization = `Bearer ${t}`;
+  const res = await fetch(`${BASE}/upload`, { method: 'POST', headers, body: fd, signal });
+  if (!res.ok) throw new Error((await res.text()) || 'Upload failed'); return res.json();
+}
+
+
 // （可选）只在开发环境且未配置 VITE_API_BASE 时才启用 mock：
 // if (import.meta.env.DEV && !import.meta.env.VITE_API_BASE) { ...保留你的 mock... }

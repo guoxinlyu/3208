@@ -1,7 +1,7 @@
 // src/pages/NewPost.jsx
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { createPost } from '../lib/api.js'
+import { createPost, uploadImage } from '../lib/api.js'
 
 const DRAFT_KEY = 'newpost_draft_v1'
 const TITLE_MAX = 80
@@ -12,6 +12,8 @@ export default function NewPost() {
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState('')
+  const [file, setFile] = useState(null)
+  const [coverUrl, setCoverUrl] = useState('')
   const nav = useNavigate()
   const dirtyRef = useRef(false)
 
@@ -23,7 +25,7 @@ export default function NewPost() {
         const d = JSON.parse(raw)
         setTitle(d.title || '')
         setContent(d.content || '')
-      } catch {}
+      } catch { }
     }
   }, [])
 
@@ -61,9 +63,16 @@ export default function NewPost() {
     setErr('')
     setLoading(true)
     try {
+      let url = coverUrl
+      if (file && !url) {
+        const { url: u } = await uploadImage(file)
+        url = u
+        setCoverUrl(u)
+      }
       const created = await createPost({
         title: title.trim(),
         content: content.trim(),
+        cover_url: url || null,
       })
       localStorage.removeItem(DRAFT_KEY)
       dirtyRef.current = false
@@ -116,6 +125,18 @@ export default function NewPost() {
         <div className="muted" style={{ fontSize: 12 }}>
           {cLen} chars（至少 {CONTENT_MIN}）
         </div>
+
+
+        <label>Cover Image (optional)</label>
+        <input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] || null)} />
+        {file && (
+          <img
+            alt="preview"
+            src={URL.createObjectURL(file)}
+            style={{ width: 280, borderRadius: 10, border: '1px solid var(--border)' }}
+          />
+        )}
+        {coverUrl && <small className="muted">Uploaded: {coverUrl}</small>}
 
         {err && <p className="error" role="alert">{err}</p>}
 
