@@ -19,7 +19,7 @@ const router = createBrowserRouter([
       { path: 'login', element: <Login /> },
       { path: 'posts', element: <Posts /> },
       { path: 'posts/:id', element: <PostDetail /> },
-      { path="/register" element={<Register/>} />
+       { path: 'register', element: <Register /> },
         path: 'new',
         element: (
           <ProtectedRoute>
