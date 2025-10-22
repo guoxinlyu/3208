@@ -3,7 +3,7 @@ const BASE = (import.meta.env.VITE_API_BASE ?? '/api').replace(/\/+$/, '');
 
 import { getToken } from './auth.js';
 
-async function request(path, { method = 'GET', body, signal } = {}) {
+export async function request(path, { method = 'GET', body, signal } = {}) {
   const headers = { 'Content-Type': 'application/json' };
   const token = getToken();
   if (token) headers['Authorization'] = `Bearer ${token}`;
