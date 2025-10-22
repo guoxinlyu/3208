@@ -9,10 +9,12 @@ export default function NavBar() {
     return (
         <header className="navbar">
             <Link to="/" className="brand">INFS3208 Web</Link>
+
             <nav className="links">
                 <NavLink to="/posts">Posts</NavLink>
                 {authed && <NavLink to="/new">New Post</NavLink>}
             </nav>
+
             <div className="right">
                 {authed ? (
                     <>
@@ -25,7 +27,12 @@ export default function NavBar() {
                         </button>
                     </>
                 ) : (
-                    <Link to="/login" className="btn">Login</Link>
+                    <>
+                        <Link to="/login" className="btn">Login</Link>
+                        <Link to="/register" className="btn" style={{ marginLeft: 8 }}>
+                            Register
+                        </Link>
+                    </>
                 )}
             </div>
         </header>
