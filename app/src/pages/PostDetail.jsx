@@ -40,6 +40,24 @@ export default function PostDetail() {
             <div className="muted" style={{ fontSize: 14 }}>
                 By {post.author} · {new Date(post.created_at || Date.now()).toLocaleString()}
             </div>
+
+            {/* 封面图（有就显示） */}
+            {post.cover_url && (
+                <img
+                    src={post.cover_url}
+                    alt="cover"
+                    style={{
+                        width: '100%',
+                        maxHeight: 420,
+                        objectFit: 'cover',
+                        borderRadius: 12,
+                        border: '1px solid var(--border)'
+                    }}
+                    loading="eager"
+                    decoding="async"
+                />
+            )}
+
             <div style={{ height: 1, background: 'color-mix(in oklab, var(--text) 10%, transparent)' }} />
             <div style={{ whiteSpace: 'pre-wrap' }}>{post.content}</div>
         </article>
