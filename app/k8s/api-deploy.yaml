@@ -12,7 +12,7 @@ spec:
       labels: { app: api }
     spec:
       # ✅（可选，长期更安全）启用后请创建并绑定 api-k8s-sa ↔ GSA
-      # serviceAccountName: api-k8s-sa
+      serviceAccountName: api-k8s-sa
 
       containers:
         - name: api
