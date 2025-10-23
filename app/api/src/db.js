@@ -5,6 +5,6 @@ export const pool = new Pool({
   host: process.env.PGHOST || '127.0.0.1',
   user: process.env.PGUSER || 'postgres',
   password: process.env.PGPASSWORD || 'Laolvzi123!',
-  database: process.env.PGDATABASE || 'appdb',
+  database: process.env.PGDATABASE || 'postgres',
   port: +(process.env.PGPORT || 5432),
 });
