@@ -1,4 +1,8 @@
 // src/lib/api.js
+// AI assistance: ChatGPT (GPT-5 Thinking) used on 2025-10-22 to review:
+// - API base derivation from Vite env with trailing-slash trim,
+// - bearer token injection pattern,
+// - JSON vs multipart (FormData) requests, and basic error handling strategy.
 const BASE = (import.meta.env.VITE_API_BASE ?? '/api').replace(/\/+$/, '');
 
 import { getToken } from './auth.js';

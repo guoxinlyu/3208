@@ -1,4 +1,6 @@
 // api/src/upload.js
+// AI assistance: ChatGPT (GPT-5 Thinking) used on 2025-10-22 to review multer memory storage limits,
+// GCS object naming strategy (date + uuid), Cache-Control best practice, and basic MIME allowlist.
 import express from 'express'
 import multer from 'multer'
 import crypto from 'crypto'

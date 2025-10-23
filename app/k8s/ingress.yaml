@@ -1,3 +1,5 @@
+# GKE HTTP(S) Ingress (GCE controller) with path-based routing
+# AI assistance: ChatGPT (GPT-5 Thinking) used on 2025-10-22 to review path rules and GCE ingress class.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

@@ -1,3 +1,6 @@
+# Deployment for API service on GKE
+# AI assistance: ChatGPT (GPT-5 Thinking) used on 2025-10-22 to review probe settings,
+# Cloud SQL Proxy args, and resource requests. Final values verified & adjusted by author.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

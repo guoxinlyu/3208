@@ -1,3 +1,8 @@
+// AI assistance: ChatGPT (GPT-5 Thinking) used on 2025-10-22 to review:
+// - /api prefix stripping middleware for GCE Ingress path (/api -> /),
+// - JWT auth flow (login/register, bearer parsing, 7d expiry),
+// - health check endpoint hitting Postgres (SELECT 1),
+// - simple search with ILIKE + LIMIT, and basic error hygiene.
 import express from 'express';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
