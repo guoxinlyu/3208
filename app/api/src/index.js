@@ -21,6 +21,7 @@ app.use(uploadRouter)
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-please-change';
 
+app.get('/', (_req, res) => res.send('OK'));
 
 app.get('/healthz', async (_req, res) => {
   try {
