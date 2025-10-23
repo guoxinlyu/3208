@@ -12,7 +12,7 @@ spec:
       labels: { app: api }
     spec:
       # ✅（可选，长期更安全）启用后请创建并绑定 api-k8s-sa ↔ GSA
-      #serviceAccountName: api-k8s-sa
+      # serviceAccountName: api-k8s-sa
 
       containers:
         - name: api
@@ -54,16 +54,15 @@ spec:
             limits:   { cpu: 500m, memory: 512Mi }
 
         - name: cloud-sql-proxy
-          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.11.4
-          args:
-            - "--structured-logs"
-            - "--port=5432"
-            - "$(INSTANCE_CONN)"        # 形如 PROJECT:REGION:INSTANCE
-          env:
-            - name: INSTANCE_CONN
-              valueFrom: { secretKeyRef: { name: db-credentials, key: INSTANCE_CONN } }
-          securityContext:
-            runAsNonRoot: true
+      image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.11.4
+      args:
+       - "--structured-logs"
+       - "--port=5432"
+       - "--private-ip"          # 如果 Cloud SQL 开启私网，否则删掉这一行
+       - "centered-center-471311-q2:us-east1:guoxin"
+      securityContext:
+       runAsNonRoot: true
+
 
 ---
 apiVersion: v1
