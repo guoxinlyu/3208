@@ -17,7 +17,7 @@ export default function NewPost() {
   const nav = useNavigate()
   const dirtyRef = useRef(false)
 
-  // 载入草稿
+  // Load draft
   useEffect(() => {
     const raw = localStorage.getItem(DRAFT_KEY)
     if (raw) {
@@ -29,19 +29,19 @@ export default function NewPost() {
     }
   }, [])
 
-  // 保存草稿
+  // Save draft
   useEffect(() => {
     const data = { title, content }
     localStorage.setItem(DRAFT_KEY, JSON.stringify(data))
     dirtyRef.current = (title.trim().length > 0 || content.trim().length > 0)
   }, [title, content])
 
-  // 离开提醒（有未提交内容）
+  // Leave-page prompt (unsaved content)
   useEffect(() => {
     const handler = (e) => {
       if (dirtyRef.current && !loading) {
         e.preventDefault()
-        e.returnValue = '' // 触发浏览器确认
+        e.returnValue = '' // Trigger browser confirmation dialog
       }
     }
     window.addEventListener('beforeunload', handler)
@@ -78,9 +78,9 @@ export default function NewPost() {
       dirtyRef.current = false
       nav(`/posts/${created.id}`)
     } catch (e) {
-      // 简化后的错误渲染
+      // Simplified error rendering
       const msg = (e && e.message) ? String(e.message) : 'Create failed'
-      setErr(msg.includes('Unauthorized') || msg.includes('401') ? '未登录或登录已过期，请重新登录。' : msg)
+      setErr(msg.includes('Unauthorized') || msg.includes('401') ? 'Not logged in or session expired. Please sign in again.' : msg)
     } finally {
       setLoading(false)
     }
@@ -123,9 +123,8 @@ export default function NewPost() {
           aria-invalid={cLen < CONTENT_MIN}
         />
         <div className="muted" style={{ fontSize: 12 }}>
-          {cLen} chars（至少 {CONTENT_MIN}）
+          {cLen} chars (at least {CONTENT_MIN})
         </div>
-
 
         <label>Cover Image (optional)</label>
         <input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] || null)} />
@@ -155,11 +154,9 @@ export default function NewPost() {
         </div>
 
         <div className="muted" style={{ fontSize: 12 }}>
-          提示：按 <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd> 快速发布
+          Tip: Press <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd> to publish quickly
         </div>
       </form>
     </div>
   )
 }
-
-

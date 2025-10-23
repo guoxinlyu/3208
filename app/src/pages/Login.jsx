@@ -16,7 +16,8 @@ export default function Login() {
 
     async function onSubmit(e) {
         e.preventDefault()
-        setErr(''); setLoading(true)
+        setErr('')
+        setLoading(true)
         try {
             const res = await apiLogin({ username, password })
             saveAuth(res.token, { username: res.username || username })
@@ -31,10 +32,17 @@ export default function Login() {
     return (
         <div className="auth card" style={{ maxWidth: 420, margin: '0 auto' }}>
             <h2 style={{ marginTop: 0 }}>Login</h2>
-            <p className="muted" style={{ marginTop: -6 }}>登录成功后将自动返回：<code>{from}</code></p>
+            <p className="muted" style={{ marginTop: -6 }}>
+                You will be redirected after login: <code>{from}</code>
+            </p>
             <form onSubmit={onSubmit} className="form" style={{ display: 'grid', gap: 12 }}>
                 <label>Username
-                    <input value={username} onChange={(e) => setUsername(e.target.value)} required className="input" />
+                    <input
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                        className="input"
+                    />
                 </label>
                 <label>Password
                     <div style={{ display: 'flex', gap: 8 }}>
@@ -46,13 +54,20 @@ export default function Login() {
                             className="input"
                             style={{ flex: 1 }}
                         />
-                        <button type="button" className="btn btn-ghost" onClick={() => setShow(s => !s)} aria-label="Toggle password">
+                        <button
+                            type="button"
+                            className="btn btn-ghost"
+                            onClick={() => setShow((s) => !s)}
+                            aria-label="Toggle password"
+                        >
                             {show ? 'Hide' : 'Show'}
                         </button>
                     </div>
                 </label>
                 {err && <p className="error" role="alert">{err}</p>}
-                <button className="btn" disabled={loading}>{loading ? '...' : 'Sign in'}</button>
+                <button className="btn" disabled={loading}>
+                    {loading ? '...' : 'Sign in'}
+                </button>
             </form>
         </div>
     )

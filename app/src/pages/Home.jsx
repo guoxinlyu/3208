@@ -20,20 +20,22 @@ export default function Home() {
 
     return (
         <div>
-            {/* 英雄区 */}
+            {/* Hero section */}
             <section className="hero">
-                <h1>改装 · 测评 · 车聚，一站到位</h1>
-                <p className="muted">发布你的改装方案与赛道测评，按车型与标签检索，结识同好，一起上路。</p>
+                <h1>Mods · Reviews · Meets — all in one place</h1>
+                <p className="muted">
+                    Share your build and track reviews, search by model and tags, meet fellow enthusiasts, and hit the road together.
+                </p>
                 <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 16 }}>
-                    <Link to="/posts" className="btn-primary">浏览热门帖子</Link>
-                    {!authed && <Link to="/register" className="btn">加入社区</Link>}
+                    <Link to="/posts" className="btn-primary">Browse popular posts</Link>
+                    {!authed && <Link to="/register" className="btn">Join the community</Link>}
                 </div>
             </section>
 
-            {/* 最新帖子（真实数据取前三条） */}
+            {/* Latest posts (show first 3 from real data) */}
             <div className="container" style={{ display: 'grid', gap: 16 }}>
                 {loading ? (
-                    // 骨架 3 条
+                    // 3 skeleton cards
                     Array.from({ length: 3 }).map((_, i) => (
                         <article key={i} className="post skeleton">
                             <div className="thumb" />
@@ -46,7 +48,7 @@ export default function Home() {
                     ))
                 ) : items.length ? (
                     items.map(p => {
-                        // 兼容不同字段名：cover / cover_url / image
+                        // Support different field names: cover / cover_url / image
                         const cover =
                             p.cover || p.cover_url || p.image ||
                             `https://picsum.photos/seed/post${p.id || Math.random()}/400/260`
@@ -56,10 +58,10 @@ export default function Home() {
                                 <img className="thumb" src={cover} alt="cover" />
                                 <div>
                                     <h3 className="title">
-                                        <Link to={`/posts/${p.id}`}>{p.title || '未命名帖子'}</Link>
+                                        <Link to={`/posts/${p.id}`}>{p.title || 'Untitled post'}</Link>
                                     </h3>
                                     <div className="muted">
-                                        {p.author ? `by ${p.author}` : '匿名作者'}
+                                        {p.author ? `by ${p.author}` : 'Anonymous'}
                                     </div>
                                 </div>
                             </article>
@@ -67,10 +69,12 @@ export default function Home() {
                     })
                 ) : (
                     <div className="card" role="status" aria-live="polite" style={{ textAlign: 'center', padding: 28 }}>
-                        <div style={{ fontSize: 18, marginBottom: 6 }}>🤔 还没有帖子</div>
+                        <div style={{ fontSize: 18, marginBottom: 6 }}>🤔 No posts yet</div>
                         <div className="muted">
-                            去 <Link to="/posts">帖子列表</Link> 看看，或
-                            {authed ? <> <Link to="/new">发布第一篇</Link>！</> : <> 先 <Link to="/register">注册</Link> 一下？</>}
+                            Check the <Link to="/posts">posts list</Link>, or
+                            {authed
+                                ? <> <Link to="/new">create the first post</Link>!</>
+                                : <> <Link to="/register">sign up</Link> first?</>}
                         </div>
                     </div>
                 )}

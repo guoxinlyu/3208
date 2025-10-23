@@ -21,7 +21,7 @@ app.use(uploadRouter)
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-please-change';
 
-// 健康检查
+
 app.get('/healthz', async (_req, res) => {
   try {
     await pool.query('SELECT 1');
@@ -32,7 +32,7 @@ app.get('/healthz', async (_req, res) => {
 });
 
 
-// 登录（演示版）
+
 app.post('/auth/login', async (req, res) => {
   const { username, password } = req.body ?? {};
   if (!username || !password) return res.status(400).json({ error: 'Missing credentials' });
@@ -46,7 +46,7 @@ app.post('/auth/login', async (req, res) => {
   res.json({ token, username: user.username });
 });
 
-// 简单鉴权中间件
+
 function auth(req, res, next) {
   const authz = req.headers.authorization || '';
   const token = authz.startsWith('Bearer ') ? authz.slice(7) : null;
@@ -80,7 +80,7 @@ app.post('/auth/register', async (req, res) => {
   }
 });
 
-// 列表
+
 app.get('/posts', async (req, res) => {
   const q = (req.query.q || '').trim();
   let result;
@@ -99,14 +99,14 @@ app.get('/posts', async (req, res) => {
   res.json(result.rows);
 });
 
-// 详情
+
 app.get('/posts/:id', async (req, res) => {
   const { rows } = await pool.query('SELECT * FROM posts WHERE id=$1', [req.params.id]);
   if (!rows[0]) return res.status(404).json({ error: 'Not found' });
   res.json(rows[0]);
 });
 
-// 新建（需要登录）
+
 app.post('/posts', auth, async (req, res) => {
   const { title, content, author, cover_url } = req.body ?? {};
   if (!title || !content) return res.status(400).json({ error: 'Missing title or content' });

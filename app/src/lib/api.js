@@ -38,6 +38,3 @@ export async function uploadImage(file, { signal } = {}) {
   if (!res.ok) throw new Error((await res.text()) || 'Upload failed'); return res.json();
 }
 
-
-// （可选）只在开发环境且未配置 VITE_API_BASE 时才启用 mock：
-// if (import.meta.env.DEV && !import.meta.env.VITE_API_BASE) { ...保留你的 mock... }

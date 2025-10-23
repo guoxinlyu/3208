@@ -22,7 +22,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
         await file.save(req.file.buffer, {
             contentType: req.file.mimetype,
             resumable: false,
-            public: true, // 你已对桶设置 allUsers:objectViewer
+            public: true,
             metadata: { cacheControl: 'public, max-age=31536000, immutable' },
         })
 
