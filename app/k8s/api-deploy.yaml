@@ -11,7 +11,6 @@ spec:
     metadata:
       labels: { app: api }
     spec:
-      # ✅（可选，长期更安全）启用后请创建并绑定 api-k8s-sa ↔ GSA
       serviceAccountName: api-k8s-sa
 
       containers:
@@ -24,8 +23,6 @@ spec:
               value: "production"
             - name: PORT
               value: "3000"
-
-            # ✅ 改为 PG*，与 db.js 的读取一致
             - name: PGHOST
               value: "127.0.0.1"
             - name: PGPORT
@@ -36,8 +33,6 @@ spec:
               valueFrom: { secretKeyRef: { name: db-credentials, key: DB_USER } }
             - name: PGPASSWORD
               valueFrom: { secretKeyRef: { name: db-credentials, key: DB_PASS } }
-
-          # ✅ 探针路径修成 /healthz（与你的 index.js 一致）
           readinessProbe:
             httpGet: { path: /healthz, port: 3000 }
             initialDelaySeconds: 5

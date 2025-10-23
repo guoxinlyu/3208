@@ -11,7 +11,6 @@ spec:
     spec:
       containers:
       - name: web
-        # 替换 PROJECT_ID
         image: us-east1-docker.pkg.dev/PROJECT_ID/apps/web:1.0.0
         ports: [{ containerPort: 80 }]
         readinessProbe: { httpGet: { path: /healthz, port: 80 }, initialDelaySeconds: 5 }

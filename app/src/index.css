@@ -1,4 +1,3 @@
-/* === 字体 & 主题变量（赛车霓虹风） === */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;800&family=Roboto+Mono:wght@500&display=swap');
 
 :root {
@@ -8,15 +7,12 @@
   --text: #e8f1f5;
   --muted: #8aa1ac;
   --primary: #22d3ee;
-  /* 霓虹青 */
   --accent: #ef4444;
-  /* 赛道红 */
   --ring: rgba(34, 211, 238, .35);
   --border: rgba(255, 255, 255, .08);
   --shadow: 0 10px 30px rgba(0, 0, 0, .35);
 }
 
-/* === 全局基础 === */
 * {
   box-sizing: border-box;
 }
@@ -37,7 +33,6 @@ body {
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
 }
 
-/* 细粒度噪点 */
 body::after {
   content: "";
   position: fixed;
@@ -65,7 +60,6 @@ a:hover {
   color: var(--muted);
 }
 
-/* === 顶部导航 === */
 .navbar {
   display: flex;
   align-items: center;
@@ -93,7 +87,7 @@ a:hover {
   color: var(--primary);
 }
 
-/* 右侧按钮 */
+
 .navbar .btn {
   padding: 8px 12px;
   border: 1px solid var(--border);
@@ -108,7 +102,7 @@ a:hover {
   box-shadow: 0 0 0 3px var(--ring);
 }
 
-/* === 首页英雄区（速度线） === */
+
 .hero {
   padding: 60px 20px 28px;
   text-align: center;
@@ -139,7 +133,7 @@ a:hover {
   filter: blur(1px);
 }
 
-/* === 通用卡片 / 表单 === */
+
 .card {
   background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
   border: 1px solid var(--border);
@@ -176,7 +170,7 @@ a:hover {
   color: #ff7070;
 }
 
-/* === 帖子卡片 === */
+
 .post {
   display: grid;
   grid-template-columns: 120px 1fr;
@@ -221,7 +215,7 @@ a:hover {
   border-color: rgba(239, 68, 68, .3);
 }
 
-/* 骨架屏 */
+
 .skeleton .thumb {
   background: linear-gradient(90deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .12), rgba(255, 255, 255, .06));
   animation: shimmer 1.2s infinite;
@@ -250,7 +244,7 @@ a:hover {
   }
 }
 
-/* 列表/网格（可选，Posts.jsx 里用到） */
+
 .list {
   list-style: none;
   margin: 0;
