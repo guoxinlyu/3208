@@ -17,9 +17,9 @@ cd 3208
 git checkout type1-clean
 
 # ===== Vars (edit these) =====
-export PROJECT_ID=<your-project-id>
+export PROJECT_ID=<your-project-id>       # TODO: Required — replace with your GCP project ID
 export NS=autoshow
-export BUCKET=<your-bucket-name>          # e.g. infs3208-post-images-xxxx
+export BUCKET=<your-bucket-name>          # TODO: Required — replace with your GCS bucket name (e.g., infs3208-post-images-xxxx)
 export REPO=us-east1-docker.pkg.dev/$PROJECT_ID/apps
 export WEB_IMG=$REPO/web
 export API_IMG=$REPO/api
@@ -36,6 +36,9 @@ kubectl get ns $NS >/dev/null 2>&1 || kubectl create ns $NS
 kubectl -n $NS create secret generic api-secrets \
   --from-literal=JWT_SECRET='replace-with-a-long-random-secret' \
   --dry-run=client -o yaml | kubectl apply -f -
+
+**Security note (DB password):**
+The file `api/src/db.js` contains a hard-coded default password (fallback for `PGPASSWORD`) intended **only** for demo/testing. 
 
 kubectl -n $NS create secret generic api-db \
   --from-literal=PGDATABASE=postgres \
